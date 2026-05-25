@@ -1,517 +1,382 @@
-
-<div align="center">
-
 # QuizMind
 
-### *Master New Skills with Curated Interactive Quizzes*
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Font Awesome](https://img.shields.io/badge/Font_Awesome-528DD7?style=for-the-badge&logo=fontawesome&logoColor=white)
+![Responsive](https://img.shields.io/badge/Responsive-Design-4F46E5?style=for-the-badge)
+![No Framework](https://img.shields.io/badge/No_Framework-Vanilla_JS-green?style=for-the-badge)
 
-[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
-[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-[![Font Awesome](https://img.shields.io/badge/Font_Awesome-339AF0?style=for-the-badge&logo=fontawesome&logoColor=white)](https://fontawesome.com/)
-[![Google Fonts](https://img.shields.io/badge/Google_Fonts-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://fonts.google.com/)
-
-[![Status](https://img.shields.io/badge/Status-Active-success?style=flat-square)](https://github.com/)
-[![Frontend](https://img.shields.io/badge/Type-Frontend_Only-blueviolet?style=flat-square)](https://github.com/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=flat-square)](https://github.com/)
-
-<br/>
-
-> A sleek, fully frontend quiz platform built with vanilla HTML, CSS, and JavaScript.  
-> Designed to feel modern, fast, and intuitive — no frameworks, no dependencies, just clean code.
-
-<br/>
-
-![QuizMind Preview](images/landingpage1.jpg)
-
-</div>
+> A modern, fully responsive, frontend-only interactive quiz platform built with vanilla HTML, CSS, and JavaScript. QuizMind delivers a polished, production-grade learning experience — from curated quiz categories and real-time scoring to a global leaderboard and personal progress tracking.
 
 ---
 
-##  Table of Contents
+## Table of Contents
 
-- [ Introduction](#-introduction)
-- [ Features](#-features)
-- [ Technologies Used](#️-technologies-used)
-- [ Authentication System](#-authentication-system)
-- [ Responsive Design](#-responsive-design)
-- [ Mobile Navigation Drawer](#-mobile-navigation-drawer)
-- [ Quiz System](#-quiz-system)
-- [ LocalStorage Usage](#-localstorage-usage)
-- [ UI/UX Design Highlights](#-uiux-design-highlights)
-- [ Folder Structure](#-folder-structure)
-- [ Future Improvements](#-future-improvements)
-- [ Installation & Usage](#️-installation--usage)
-- [ Contributing](#-contributing)
-
----
-
-##  Introduction
-
-**QuizMind** is a modern, fully interactive quiz platform built entirely with **vanilla HTML, CSS, and JavaScript** — no frameworks, no build tools, no backend. It was designed as a portfolio-grade frontend project that demonstrates real-world UI patterns, dynamic JavaScript rendering, client-side routing, and thoughtful UX design.
-
-The platform allows users to browse quiz categories, take timed quizzes, track their progress, view a global leaderboard, and review their past results — all within a single-page application architecture powered by the History API.
-
-Whether you're a learner wanting to test your knowledge or a developer looking for frontend inspiration, QuizMind delivers a polished and performant experience right in the browser.
+- [Introduction](#introduction)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
+- [Authentication System](#authentication-system)
+- [Quiz System](#quiz-system)
+- [LocalStorage Architecture](#localstorage-architecture)
+- [Responsive Design](#responsive-design)
+- [Mobile Navigation](#mobile-navigation)
+- [UI/UX Design Highlights](#uiux-design-highlights)
+- [Installation and Usage](#installation-and-usage)
+- [Future Improvements](#future-improvements)
 
 ---
 
-##  Features
+## Introduction
 
-###  Landing Page
-- Animated hero section with headline, description, and call-to-action buttons
-- **"See How It Works"** button smoothly scrolls to the Three Steps to Mastery section
-- Trending categories grid with direct links to quiz intro pages
-- Step-by-step mastery guide section
-- Full-width CTA banner to drive engagement
+QuizMind is a feature-rich, single-page quiz platform designed to showcase modern frontend development practices without relying on any CSS framework or JavaScript library. Every interaction — from animated page transitions to real-time score tracking — is engineered from scratch using clean, organized vanilla code.
 
-###  Categories Page
-- Dynamically rendered quiz category cards from the data file
-- Each card displays a real cover image, category name, and is fully clickable
-- Featured "Weekly Special" section with highlighted content
-- Smooth hover animations on all cards
+The platform is structured around a multi-view SPA (Single Page Application) architecture where all views are rendered and managed entirely in the browser. Users can browse categorized quizzes, take timed challenges, track their performance in a personal dashboard, and compete on a global leaderboard — all without a single page reload.
 
-###  Quiz Intro Page
-- Per-category cover image, description, question count, and estimated time
-- Resume Quiz / Restart Quiz logic based on saved progress
-- Stat cards showing enrolled students, average rating, and certificate availability
-
-###  Active Quiz Interface
-- One question at a time with labeled answer options (A, B, C, D)
-- Live countdown timer per category
-- Progress bar that fills as you advance
-- Previous Question button — safely navigates back without affecting score
-- Answer state is restored when navigating back (your previous selection is highlighted)
-- Finish Quiz button on the last question
-
-###  Results Page
-- Final score display with large typography
-- Accuracy percentage pill
-- Time spent (real elapsed time, not just the limit)
-- Detailed question-by-question summary with ✔ / ✘ indicators
-- Skipped questions shown with a neutral — indicator
-- Play Again and Back to Home actions
-
-###  Leaderboard
-- Aggregates all user scores stored in localStorage
-- Sorted by score descending
-- Shows username, category, and score per entry
-
-###  My Quizzes
-- Lists all quizzes the user has started or completed
-- Shows real cover image per quiz (matching the categories page)
-- Displays progress bar, completion status, and final score
-- Clicking a completed quiz takes you back to its results
-- Clicking an in-progress quiz resumes from where you left off
-
-###  Dark / Light Mode
-- System preference detection on first visit
-- Manual toggle with a sun/moon icon button
-- Preference persisted in localStorage across sessions
-- Smooth CSS variable transition across the entire UI
+This project was built as a frontend portfolio piece to demonstrate mastery of JavaScript DOM manipulation, CSS architecture, responsive design, client-side state management, and thoughtful UX engineering.
 
 ---
 
-##  Technologies Used
+## Features
+
+**Core Platform**
+
+- Multi-view single-page application with animated view transitions
+- Browser History API integration — the back button navigates correctly between views
+- Dark mode with system preference detection and persistent user preference via localStorage
+- Fully responsive layout that adapts seamlessly from desktop to mobile
+
+**Quiz Experience**
+
+- Dynamic quiz rendering driven entirely by a structured JavaScript data file
+- Per-category timed quizzes with a live countdown timer
+- Previous and Next question navigation with answer persistence — revisiting a question restores the previously selected answer
+- Correct answer scoring computed from an index-map structure, ensuring no double-counting regardless of navigation direction
+- Animated progress bar tracking completion across questions
+- Detailed results screen with per-question breakdown, accuracy percentage, and real time-spent calculation
+
+**User System**
+
+- Username-based authentication with sign-in, session persistence, and sign-out
+- Protected views that require authentication before access
+- Auth guard system redirecting unauthenticated users to the login flow
+
+**Progress and Leaderboard**
+
+- Per-category quiz progress saved automatically to localStorage
+- Resume interrupted quizzes from exactly where you left off
+- Completed quiz review — click any finished quiz to re-read your results
+- Global leaderboard aggregated from all stored user scores
+- Personal "My Quizzes" dashboard showing progress, completion status, and scores
+
+**Landing Page**
+
+- Hero section with call-to-action buttons
+- Trending categories section with direct links to quiz intros
+- Three-step visual guide with smooth scroll behavior triggered by the "See How It Works" button
+- Animated CTA section
+
+---
+
+## Technologies Used
 
 | Technology | Purpose |
 |---|---|
-| **HTML5** | Semantic page structure and SPA view management |
-| **CSS3** | Custom design system with CSS variables, Grid, Flexbox, animations |
-| **JavaScript (ES6+)** | Dynamic rendering, quiz logic, routing, state management |
-| **Font Awesome 7** | Icon library used throughout the UI |
-| **Google Fonts** | Inter + Manrope for clean, modern typography |
-| **History API** | Client-side navigation with pushState / popstate for browser back support |
-| **localStorage** | Persistent auth, quiz progress, scores, and theme preference |
+| HTML5 | Semantic document structure and SPA view scaffolding |
+| CSS3 | Custom design system, animations, dark mode, responsive layout |
+| Vanilla JavaScript (ES6+) | SPA routing, DOM rendering, state management, quiz logic |
+| CSS Custom Properties | Centralized theming and dark mode switching |
+| CSS Grid and Flexbox | All layout systems — no external grid framework used |
+| Font Awesome 7 | Icon library for UI elements throughout the platform |
+| Google Fonts (Inter, Manrope) | Typography — clean, modern sans-serif font pairing |
+| Browser History API | SPA navigation with back/forward button support |
+| localStorage API | Authentication, quiz progress, scores, and theme persistence |
 
->  Zero external UI frameworks. Zero npm packages. Zero build steps.  
-> Everything runs directly in the browser as a native ES module.
-
----
-
-##  Authentication System
-
-QuizMind includes a **lightweight client-side authentication system** built entirely on localStorage — no backend or server required.
-
-### How It Works
-
-1. **Sign In** — The user clicks "Sign In" in the header and enters a username via a prompt dialog.
-2. **Persistence** — The username is saved to `localStorage` under the key `quizUser`.
-3. **Session Restoration** — On every page load, the app checks for a saved user and updates the header UI to display `Hi, [username]`.
-4. **Score Attribution** — When a quiz is completed, the score is stored under `quizScores_[username]` in localStorage, linking results to the authenticated user.
-5. **Leaderboard** — All user scores are aggregated from localStorage keys prefixed with `quizScores_`, allowing multi-user score tracking in a single browser.
-
-### Auth Guard Concept
-
-Pages like **My Quizzes** and **Leaderboard** are accessible to all users, but score saving and personalized history only activate when a user is signed in. This creates a natural incentive to authenticate.
-
-### Why localStorage?
-
-This project is a **fully frontend portfolio application** with no backend. localStorage provides:
-- Zero-latency reads and writes
-- Persistence across browser sessions
-- No server infrastructure required
-- A realistic simulation of real auth flows for demo purposes
-
->  In a production application, this would be replaced with JWT tokens, OAuth, or a proper backend authentication service.
+No CSS frameworks (Bootstrap, Tailwind), no JavaScript libraries (React, Vue, jQuery), and no build tools are required. The entire project runs directly in the browser from static files.
 
 ---
 
-## Responsive Design
+## Project Structure
 
-QuizMind is fully responsive across all screen sizes using a **mobile-first CSS approach** with carefully crafted media query breakpoints.
+```
+quizmind/
+│
+├── index.html              # Single HTML file containing all view templates
+├── style.css               # Complete custom CSS design system
+├── app.js                  # Main application logic — routing, rendering, state
+├── data.js                 # Quiz data source — categories, questions, answers
+│
+└── images/
+    ├── landingpage1.jpg    # Hero section background image
+    ├── logicIQ.jpg         # Logic and IQ category cover
+    ├── webdesign.jpg       # Web Design category cover
+    ├── ux.jpg              # UX Design category cover
+    └── motiondesign.jpg    # Motion Graphics category cover
+```
 
-### Breakpoints
-
-| Breakpoint | Target Devices | Layout Changes                                                   
-|------------|----------------|------------------------------------------------------------------
-| `> 1024px` | Desktop        | Full two-column hero, 3-column category grid, side-by-side intro 
-| `≤ 1024px` | Tablet         | Single-column hero, 2-column grids, stacked intro layout         
-| `≤ 768px`  | Mobile         | Single-column everything, stacked buttons, hidden desktop nav    
-| `≤ 420px`  | Small mobile   | Scaled-down typography, compact header                           
-
-### Key Responsive Behaviors
-
-- **Hero section** collapses from a two-column grid to a stacked layout on tablet
-- **Category cards** reflow from 3 → 2 → 1 columns depending on viewport
-- **Quiz footer buttons** stack vertically on mobile for easier thumb access
-- **Results stats row** collapses from 3 columns to a single column on small screens
-- **Footer links** wrap and center-align on mobile
-- **Intro stats** collapse from 3 columns to 1 column on mobile
-- All **font sizes** scale down proportionally using rem units
+The architecture follows a clear separation of concerns: structure in HTML, presentation in CSS, behavior in JavaScript, and content in data.js. All views are defined in `index.html` and toggled by JavaScript — only one view is visible at a time using a CSS `.active` class managed by the `switchView()` function.
 
 ---
 
-## ☰ Mobile Navigation Drawer
+## Authentication System
 
-On screens `≤ 768px`, the standard horizontal navigation bar is hidden and replaced by a **mobile-friendly navigation drawer** system.
+QuizMind implements a lightweight, frontend-only authentication system designed to simulate the behavior of a real auth flow without a backend.
 
-### Features
+**How it works:**
 
-- The desktop nav (`<nav class="main-nav">`) is hidden via CSS on small screens
-- A hamburger icon button (`☰`) appears in the header on mobile
-- Tapping it slides in a full-width navigation drawer from the left/top
-- The drawer contains all the same navigation links: Browse, Categories, Leaderboard, My Quizzes
-- Tapping any link closes the drawer and navigates to the correct view
-- An overlay darkens the background content when the drawer is open
-- The drawer respects the current dark/light theme
+When a user clicks "Sign In", they are prompted to enter a username. This username is immediately persisted to localStorage under the key `quizUser`. On every subsequent page load, the application checks for this key during initialization and restores the authenticated session automatically — the user remains signed in across browser sessions.
 
-### Implementation
+```javascript
+// Session check on init
+const savedUser = localStorage.getItem('quizUser');
+if (savedUser) updateAuthUI(savedUser);
+```
 
-The drawer is toggled via a CSS class added to the `<body>` element, with the drawer's transition handled by CSS `transform` and `transition` properties for smooth animation. No JavaScript animation libraries are needed.
+The auth state drives several behaviors across the platform:
+
+- The navigation header updates to display "Hi, [username]" when authenticated
+- Quiz scores are saved under a user-specific key (`quizScores_username`), meaning scores are tied to individual accounts
+- The leaderboard aggregates scores across all stored user sessions, so multiple users on the same device can compete
+- Protected views check for an active session before rendering sensitive content
+
+While this system uses localStorage rather than server-side tokens, it accurately mirrors the structural patterns of real authentication — session persistence, user-scoped data, and UI state driven by auth status — making it a valid demonstration of auth flow architecture in a frontend context.
 
 ---
 
-##  Quiz System
+## Quiz System
 
-The quiz engine is the core of QuizMind, built entirely in vanilla JavaScript with a clean, predictable state machine architecture.
+The quiz engine is the core of the application. Every quiz is driven dynamically from the `data.js` file, which exports a structured object where each key is a category name and its value is an array of question objects.
 
-### Quiz State Object
-
-Every active quiz session is tracked by a central state object:
+**Data structure per question:**
 
 ```javascript
 {
-  category: "Web Design",
-  currentQuestionIndex: 2,
-  answers: {
-    0: 1,   // Question 0 → user selected option index 1
-    1: 3,   // Question 1 → user selected option index 3
-    2: 0    // Question 2 → user selected option index 0
-  }
+    image: "images/category.jpg",       // Category cover image (first question only)
+    description: "Quiz description...", // Shown on the intro page (first question only)
+    timeLimit: 240,                     // Total seconds for the quiz (first question only)
+    question: "Question text here?",
+    answers: ["Option A", "Option B", "Option C", "Option D"],
+    correct: 1                          // Zero-based index of the correct answer
 }
 ```
 
-> **Key design decision:** Answers are stored as an **object (map)** keyed by question index — not an array. This is what makes the Previous Question button work correctly without ever double-counting or losing answers.
+**Answer tracking with an index map:**
 
-### Previous Question Logic
-
-When the user clicks Previous:
-1. `currentQuestionIndex` decrements by 1
-2. The question is re-rendered
-3. The user's **previous answer for that question** is automatically restored and highlighted
-4. If the user changes their answer, it **overwrites** the stored value for that index
-5. Score is only calculated at the **end**, by iterating all stored answers — so going back and changing an answer simply updates the map entry with no side effects
-
-### Score Calculation
-
-Score is never tracked incrementally. Instead, it is calculated **once at the end** by comparing every stored answer against the correct answer:
+A critical design decision is storing answers as an object map (`{ questionIndex: selectedAnswerIndex }`) rather than a sequential array. This approach solves the classic previous-button scoring bug:
 
 ```javascript
-let score = 0;
+// Answers stored as a map
+activeQuizState.answers = { 0: 2, 1: 0, 3: 1 }
+
+// Score calculated by iterating all questions exactly once
 questions.forEach((q, i) => {
     if (activeQuizState.answers[i] === q.correct) score++;
 });
 ```
 
 This means:
-- ✅ Going back and correcting an answer updates the final score correctly
-- ✅ Skipped questions (no entry in the map) score 0 without crashing
-- ✅ No double-counting is possible
 
-### Timer
+- Navigating back to a question and changing the answer simply overwrites the map entry — no duplication
+- Skipping a question leaves its index undefined — counted as incorrect and shown as unanswered in the summary
+- The score is always computed at results time from the final state of the map, never incremented in real time
 
-Each category has a configurable `timeLimit` (in seconds) defined in `data.js`. The timer counts down live and triggers automatic quiz submission when it reaches zero.
+**Quiz lifecycle:**
 
-### Progress Persistence
-
-After every answer, the current state is serialized and saved to localStorage:
-```javascript
-localStorage.setItem('quizProgress_' + state.category, JSON.stringify(state));
-```
-This means if the user closes the tab mid-quiz, they can resume from exactly where they left off.
+1. User selects a category from the categories grid
+2. Quiz intro view shows the description, question count, and time estimate
+3. On "Start Quiz", the state object is initialized and the timer starts
+4. Each question is rendered from the data array with answer options built dynamically
+5. Selecting an option enables the Next button; the selection is stored in the answers map
+6. On the last question, "Next" becomes "Finish Quiz"
+7. Results are calculated from the final answers map, saved to localStorage, and the results view is rendered
 
 ---
 
-##  LocalStorage Usage
+## LocalStorage Architecture
 
-QuizMind uses localStorage as its entire persistence layer. Here is a full breakdown of every key used:
+All client-side persistence is organized under clearly namespaced localStorage keys:
 
-| Key Pattern | Type | Contents |
+| Key | Value | Purpose |
 |---|---|---|
-| `quizUser` | `string` | Currently signed-in username |
-| `theme` | `string` | `"dark"` or `"light"` — user's preferred theme |
-| `quizProgress_[category]` | `JSON object` | Active quiz state: index, answers map |
-| `quizScores_[username]` | `JSON array` | Array of `{ category, score, total, date }` per user |
+| `quizUser` | `"username"` | Active authenticated session |
+| `theme` | `"dark"` or `"light"` | User's preferred color scheme |
+| `quizProgress_[Category]` | Serialized state object | Saves mid-quiz progress per category |
+| `quizScores_[username]` | Array of score objects | Stores best scores per user per category |
 
-### Storage Flow Example
+Quiz progress objects include the current question index and the full answers map, enabling complete mid-session restoration. When a user resumes a quiz, their previously selected answers are visually restored on each question as they navigate.
 
-```
-User signs in as "Alex"
-  → localStorage.setItem("quizUser", "Alex")
-
-Alex starts the "Web Design" quiz
-  → localStorage.setItem("quizProgress_Web Design", {...})
-
-Alex answers all questions and finishes
-  → localStorage.setItem("quizScores_Alex", [{category: "Web Design", score: 4, total: 5}])
-
-Alex toggles dark mode
-  → localStorage.setItem("theme", "dark")
-
-Alex revisits — all state is restored automatically
-```
+Score objects track the category name, score, total questions, and timestamp, enabling accurate leaderboard construction by iterating all `quizScores_*` keys at render time.
 
 ---
 
-##  UI/UX Design Highlights
+## Responsive Design
 
-QuizMind was designed with a strong focus on visual consistency, micro-interactions, and user clarity.
+QuizMind is built mobile-first with a three-tier responsive layout system defined entirely in custom CSS using media queries.
 
-### Design System
+**Breakpoints:**
 
-All colors, shadows, and typography are defined as **CSS custom properties** in `:root`, making theming and dark mode effortless:
+| Breakpoint | Target | Key layout changes |
+|---|---|---|
+| Default (> 1024px) | Desktop | Two-column hero, three-column grids, side-by-side intro layout |
+| max-width: 1024px | Tablet | Single-column hero, two-column category grid, stacked intro |
+| max-width: 768px | Mobile | Single-column everything, hidden desktop nav, stacked quiz footer |
+| max-width: 420px | Small mobile | Reduced typography scale, tighter spacing |
+
+The layout engine uses CSS Grid for all multi-column sections and Flexbox for component-level alignment. No fixed widths are used on container elements — all layouts flow naturally within their responsive context.
+
+Notable responsive behaviors include the categories grid collapsing from a 3-2-1 column layout, the quiz footer buttons stacking vertically on mobile, the results stats row shifting to a single column, and the hero section reorganizing from a two-column split to a stacked layout.
+
+---
+
+## Mobile Navigation
+
+On mobile viewports, the desktop navigation bar is hidden and replaced with a hamburger menu drawer. The drawer slides in from the side as an overlay, providing full navigation access without consuming permanent screen space.
+
+**Implementation details:**
+
+- A hamburger icon button appears in the header on mobile, replacing the inline nav links
+- Clicking the icon toggles a class on the body, triggering a CSS transition on the drawer panel
+- The drawer contains all navigation links, the theme toggle, and the auth controls
+- Tapping any nav link or the overlay backdrop closes the drawer automatically
+- The transition uses CSS `transform: translateX()` for GPU-accelerated animation, keeping the interaction smooth on low-powered mobile devices
+
+---
+
+## UI/UX Design Highlights
+
+QuizMind was designed to feel like a polished commercial product. Every visual and interaction decision was deliberate.
+
+**Design system:**
+
+All colors, shadows, and spacing are defined as CSS custom properties on `:root`, with a parallel dark mode override block on `body.dark`. The entire visual theme switches with a single class toggle — only the class changes, CSS handles the rest.
 
 ```css
 :root {
-  --color-primary: #4F46E5;
-  --color-background: #F4F7FB;
-  --color-surface: #FFFFFF;
-  --shadow-float: 0 20px 25px -5px rgba(0,0,0,0.1);
-  --font-family: 'Inter', 'Manrope', sans-serif;
+    --color-primary: #4F46E5;
+    --color-background: #F4F7FB;
+    --color-surface: #FFFFFF;
 }
-```
 
-Dark mode simply overrides these variables on `body.dark`:
-
-```css
 body.dark {
-  --color-background: #0B1220;
-  --color-surface: #111827;
-  --color-primary: #818CF8;
+    --color-background: #0B1220;
+    --color-surface: #111827;
+    --color-primary: #818CF8;
 }
 ```
 
-### Animations & Micro-interactions
+**Interaction polish:**
 
-- **View transitions** — every view switch uses a `fadeIn` CSS animation (opacity + translateY)
-- **Card hover effects** — category and trending cards lift with `transform: translateY(-4px)` and a deeper shadow
-- **Option selection** — quiz answer cards get a border, background tint, and colored label badge on selection
-- **Progress bar** — smooth `transition: width 0.4s ease` as the quiz advances
-- **Button states** — primary buttons have hover lift + shadow; disabled buttons desaturate gracefully
+- View transitions use a `fadeIn` keyframe animation — each new view fades up from a slight vertical offset, giving the SPA a native-app feel
+- Buttons apply `transform: translateY(-1px)` on hover with a subtle box-shadow transition
+- Category and quiz cards lift with `transform: translateY(-4px)` on hover
+- Option cards show a highlighted selection ring using `box-shadow` and border-color change
+- The progress bar width animates with a 0.4s ease transition on every question advance
+- The timer display updates every second with zero layout shift
 
-### Typography
+**Typography:**
 
-Two complementary Google Fonts are used:
-- **Manrope** — used for headings and display text (high visual weight, geometric)
-- **Inter** — used for body text, labels, and UI (highly legible at small sizes)
+The platform uses a two-font pairing: Inter for body text and UI elements, and Manrope for headings. Font weights range from 400 to 800, with heavier weights reserved for hero titles and score displays to create clear visual hierarchy.
 
-### Iconography
+**Color and depth:**
 
-Font Awesome 7 provides consistent, scalable icons across the entire UI — navigation, quiz pills, stat cards, results, and more — all rendered as crisp SVG fonts.
-
----
-
-##  Folder Structure
-
-```
-quizmind/
-│
-├── index.html              # Main HTML file — all views are sections inside this
-├── style.css               # Complete custom CSS design system
-├── app.js                  # Core application logic (ES module)
-├── data.js                 # Quiz data — categories, questions, answers, images
-│
-├── images/
-│   ├── landingpage1.jpg    # Hero section background image
-│   ├── logicIQ.jpg         # Logic & IQ category cover
-│   ├── webdesign.jpg       # Web Design category cover
-│   ├── ux.jpg              # UX Design category cover
-│   └── motiondesign.jpg    # Motion Graphics category cover
-│
-└── README.md               # This file
-```
-
-### Architecture Notes
-
-- **Single HTML file** — all views (`landing`, `categories`, `intro`, `quiz`, `results`, `leaderboard`, `my-quizzes`) live as `<section>` elements. Only the active view has the `.active` class, controlled entirely by JavaScript.
-- **ES Modules** — `app.js` uses `import { quizzes } from './data.js'` so quiz data is cleanly separated and easy to extend.
-- **No build step** — the project runs directly in any modern browser via a local server or file open.
+Cards and surfaces use layered shadows from a custom shadow scale (`--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-float`) rather than flat borders alone. This creates a sense of depth and elevation that guides the user's eye to interactive elements.
 
 ---
 
-##  Future Improvements
+## Installation and Usage
 
-There's a lot of room to grow QuizMind into a full production platform. Here are the most impactful planned improvements:
+QuizMind requires no build tools, package managers, or server configuration. It runs directly from any static file server.
 
-###  Technical
-- [ ] **Real backend** — Replace localStorage auth with a Node.js/Express or Firebase backend
-- [ ] **User accounts** — Proper signup, login, password hashing, and JWT sessions
-- [ ] **Database** — Store quiz data, scores, and user progress in a real database (MongoDB / PostgreSQL)
-- [ ] **Quiz creation** — Allow authenticated users to create and publish their own quizzes
-- [ ] **API integration** — Pull quiz questions from the Open Trivia Database API for infinite content
+**Option 1 — VS Code Live Server (recommended):**
 
-###  UI/UX
-- [ ] **Hamburger menu animation** — Polish the mobile drawer with spring animations
-- [ ] **Question types** — Add true/false, fill-in-the-blank, and image-based questions
-- [ ] **Difficulty levels** — Filter quizzes by Easy / Medium / Hard
-- [ ] **Sound effects** — Optional audio feedback on correct/incorrect answers
-- [ ] **Confetti animation** — Celebrate perfect scores with a confetti burst
+1. Install the [Live Server extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) in VS Code
+2. Open the project folder in VS Code
+3. Right-click `index.html` and select "Open with Live Server"
+4. The app opens at `http://127.0.0.1:5500`
 
-###  Features
-- [ ] **Global leaderboard** — Real-time leaderboard across all users (requires backend)
-- [ ] **Streak tracking** — Daily quiz streaks and achievement badges
-- [ ] **Social sharing** — Share your score to Twitter/X or copy a results card image
-- [ ] **Search & filter** — Search quizzes by keyword, filter by category or difficulty
-- [ ] **Bookmarks** — Save quizzes to a personal reading list
-
----
-
-##  Installation & Usage
-
-QuizMind is a **zero-dependency** project. No npm, no build tools, no configuration required.
-
-### Prerequisites
-
-- A modern web browser (Chrome, Firefox, Edge, Safari)
-- A simple local server (to support ES modules — required for `import` statements)
-
-### Option 1 — VS Code Live Server (Recommended)
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/your-username/quizmind.git
-   cd quizmind
-   ```
-
-2. **Open in VS Code**
-   ```bash
-   code .
-   ```
-
-3. **Install the Live Server extension** (if not already installed)
-   - Open Extensions (`Ctrl+Shift+X`)
-   - Search for "Live Server" by Ritwick Dey
-   - Click Install
-
-4. **Start the server**
-   - Right-click `index.html` in the Explorer
-   - Select **"Open with Live Server"**
-   - The app opens at `http://127.0.0.1:5500`
-
-### Option 2 — Python HTTP Server
+**Option 2 — Python local server:**
 
 ```bash
-# Python 3
-python -m http.server 5500
-
-# Then open in browser:
-# http://localhost:5500
+git clone https://github.com/your-username/quizmind.git
+cd quizmind
+python -m http.server 8000
+# Open http://localhost:8000
 ```
 
-### Option 3 — Node.js HTTP Server
+**Option 3 — Node.js:**
 
 ```bash
+git clone https://github.com/your-username/quizmind.git
+cd quizmind
 npx serve .
-# or
-npx http-server .
+# Open the URL shown in the terminal
 ```
 
-###  Important: Do Not Open as a File
+> Note: Because `app.js` and `data.js` use ES6 module syntax (`import`/`export`), browsers block module loading from `file://` URLs. Always use a local server rather than opening `index.html` directly.
 
-Do **not** open `index.html` by double-clicking it (i.e. `file:///...`). ES modules (`import`/`export`) are blocked by the browser's CORS policy when loaded from the filesystem. You **must** use a local HTTP server as shown above.
+**Adding quiz content:**
+
+All quiz data lives in `data.js`. To add a new category, add a new key to the exported `quizzes` object following the existing structure, and add a cover image to the `images/` folder. The categories grid, intro page, and My Quizzes dashboard will all reflect it automatically — no other changes are needed.
 
 ---
 
-## Adding New Quizzes
+## Future Improvements
 
-Adding new content to QuizMind is as simple as editing `data.js`:
+**Backend integration**
 
-```javascript
-export const quizzes = {
-  "Your New Category": [
-    {
-      image: "images/your-image.jpg",
-      description: "A short description of what this quiz covers.",
-      timeLimit: 180, // seconds
-      question: "Your first question here?",
-      answers: ["Option A", "Option B", "Option C", "Option D"],
-      correct: 1 // zero-based index of the correct answer
-    },
-    // Add more questions...
-  ]
-};
-```
+Migrating from localStorage to a real backend (Node.js + Express or a service like Supabase) would enable genuine multi-user authentication, server-side score persistence, and a truly global leaderboard shared across all devices and sessions.
 
-The UI will automatically pick up the new category and render it everywhere — categories grid, my quizzes, leaderboard, and intro page.
+**User profiles**
+
+A dedicated profile page showing total quizzes completed, average accuracy, time spent, strongest categories, and earned badges would add significant depth to the personal progress system.
+
+**Quiz creation**
+
+An in-browser quiz builder allowing authenticated users to create, publish, and share their own quiz categories would transform QuizMind from a content-consumption platform into a community-driven one.
+
+**Advanced question types**
+
+Beyond multiple-choice, supporting true/false, fill-in-the-blank, image-based questions, and ordered ranking would make the quiz engine significantly more versatile.
+
+**Spaced repetition**
+
+Tracking which questions a user gets wrong and surfacing them in future sessions using a spaced repetition algorithm would improve long-term knowledge retention.
+
+**Accessibility**
+
+Full WCAG 2.1 AA compliance including keyboard navigation throughout the quiz flow, ARIA live regions for timer updates, focus management on view transitions, and sufficient color contrast in all theme variants.
+
+**PWA support**
+
+Adding a service worker and web app manifest would allow QuizMind to be installed on mobile home screens and function offline, significantly improving the mobile experience.
 
 ---
 
-##  Contributing
+## Contributing
 
-Contributions, issues, and feature requests are welcome!
+Contributions, issues, and feature requests are welcome.
 
 1. Fork the repository
-2. Create your feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add some amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
+2. Create a feature branch: `git checkout -b feature/your-feature-name`
+3. Commit your changes: `git commit -m 'Add: brief description'`
+4. Push to the branch: `git push origin feature/your-feature-name`
+5. Open a Pull Request with a clear description of the change
 
-Please make sure your code follows the existing style conventions and doesn't introduce any external dependencies.
+---
+
+## License
+
+This project is licensed under the MIT License. You are free to use, modify, and distribute it for personal or commercial purposes with attribution.
 
 ---
 
 <div align="center">
 
-##  Show Your Support
+**QuizMind** — Built as a frontend portfolio project.
 
-If you found this project useful or inspiring, please consider giving it a ⭐ on GitHub.  
-It helps others discover it and motivates continued development.
+Designed and developed with a commitment to clean code, thoughtful design, and the craft of frontend engineering.
 
-<br/>
-
----
-
-<br/>
-
-**Built by a frontend developer who believes great UI doesn't need a framework.**
-
-*QuizMind — Where curiosity meets challenge.*
-
-<br/>
-
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github)](https://github.com/your-username)
-[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-4F46E5?style=for-the-badge&logo=firefox)](https://your-portfolio.com)
+Made with dedication.
 
 </div>
