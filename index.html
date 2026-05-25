@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- ============================================================
+     HEAD
+     ============================================================ -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMind</title>
+    <meta name="description" content="A modern and elegant quiz experience.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- ============================================================
+     HEADER
+     ============================================================ -->
+    <header class="global-header">
+        <div class="header-inner">
+            <div class="logo" style="cursor: pointer;">QuizMind</div>
+
+            <nav class="main-nav">
+                <a href="#" id="nav-browse" class="nav-link active">Browse</a>
+                <a href="#" id="nav-categories" class="nav-link">Categories</a>
+                <a href="#" id="nav-leaderboard" class="nav-link">Leaderboard</a>
+                <a href="#" id="nav-my-quizzes" class="nav-link">My Quizzes</a>
+            </nav>
+
+            <div class="header-right">
+                <div class="header-auth">
+                    <a href="login.html" class="nav-link sign-in-link" id="nav-sign-in">Sign In</a>
+                    <button class="btn btn-primary btn-sm get-started-btn" id="btn-get-started"
+                        onclick="window.location.href='signup.html'">Get Started</button>
+
+                    <span id="user-display-desktop"
+                        style="display: none; font-size: 0.9rem; font-weight: 500; margin-right: 0.5rem; opacity: 0.8;"></span>
+                    <button id="logout-btn-desktop" class="btn btn-ghost"
+                        style="display: none; color: #e74c3c;">Logout</button>
+
+                    <button id="theme-toggle" class="btn btn-ghost">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                </div>
+                <div class="header-close">
+                    <button class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false">
+                    <span class="ham-bar"></span>
+                    <span class="ham-bar"></span>
+                    <span class="ham-bar"></span>
+                </button>
+            </div>
+
+            <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+                <div class="mobile-drawer-inner">
+                    <nav class="mobile-nav">
+                        <a href="#" id="mob-nav-browse" class="mob-nav-link active"><i class="fa-solid fa-compass"></i>
+                            Browse</a>
+                        <a href="#" id="mob-nav-categories" class="mob-nav-link"><i class="fa-solid fa-grid-2"></i>
+                            Categories</a>
+                        <a href="#" id="mob-nav-leaderboard" class="mob-nav-link"><i class="fa-solid fa-trophy"></i>
+                            Leaderboard</a>
+                        <a href="#" id="mob-nav-my-quizzes" class="mob-nav-link"><i class="fa-solid fa-bookmark"></i> My
+                            Quizzes</a>
+                    </nav>
+                    <div class="mobile-drawer-auth">
+                        <div id="guest-ui-mobile">
+                            <a href="login.html" class="mob-sign-in-link mob-nav-link"
+                                style="margin-bottom: 0.75rem;"><i class="fa-regular fa-user"></i> Sign In</a>
+                            <button class="btn btn-primary w-full" id="mob-get-started-btn"
+                                onclick="window.location.href='signup.html'">Get Started Free</button>
+                        </div>
+
+                        <div id="auth-ui-mobile" style="display: none; text-align: left;">
+                            <div id="user-display-mobile"
+                                style="font-size: 0.9rem; font-weight: 600; padding: 0.5rem; margin-bottom: 0.5rem; border-bottom: 1px solid rgba(0,0,0,0.1); opacity: 0.8;">
+                            </div>
+                            <button id="logout-btn-mobile" class="btn w-full"
+                                style="background-color: #e74c3c; color: white;">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="drawer-backdrop" id="drawer-backdrop"></div>
+
+        </div>
+    </header>
+
+
+    <!-- ============================================================
+     MAIN — JS toggles .active on each section to show/hide views
+     ============================================================ -->
+    <main class="app-main">
+
+
+        <!-- ========================================================
+         VIEW: LANDING
+         ======================================================== -->
+        <section id="landing-view" class="view active">
+            <div class="hero-container">
+
+                <div class="hero-text">
+                    <div class="hero-pill">Unlock Your Potential</div>
+                    <h1 class="hero-title">Master New Skills with Curated <span class="text-highlight">Interactive
+                            Quizzes</span></h1>
+                    <p class="hero-desc">Join thousands of creative professionals sharpening their craft through daily
+                        challenges and community-driven learning.</p>
+                    <div class="hero-actions">
+                        <button id="btn-browse" class="btn btn-primary">Start Your Journey</button>
+                        <button class="btn btn-outline"><span class="icon"><i class="fa-solid fa-play"></i></span> See
+                            How It Works</button>
+                    </div>
+                </div>
+
+                <div class="hero-image-wrapper">
+                    <div class="hero-image-placeholder">
+                        <img src="images/landingpage1.jpg" class="hero-image" />
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+
+                <div class="trending-section">
+                    <div class="section-header">
+                        <div>
+                            <h2 class="section-title">Trending Categories</h2>
+                            <p class="section-subtitle">The most popular paths for modern designers</p>
+                        </div>
+                        <a href="#" class="explore-link">Explore All Categories</a>
+                    </div>
+                    <div class="trending-grid">
+                        <div class="trending-card">
+                            <div class="card-icon blue"><i class="fa-solid fa-globe"></i></div>
+                            <h3>Web Design</h3>
+                            <p>Responsive layouts, modern CSS, and performance optimization.</p>
+                            <div class="card-stats">142 Quizzes • 12k Learners</div>
+                            <button class="btn btn-light w-full">Browse Quizzes</button>
+                        </div>
+                        <div class="trending-card">
+                            <div class="card-icon blue"><i class="fa-solid fa-pen-to-square"></i></div>
+                            <h3>UX Design</h3>
+                            <p>User research, behavioral psychology, and information architecture.</p>
+                            <div class="card-stats">211 Quizzes • 45k Learners</div>
+                            <button class="btn btn-light w-full">Browse Quizzes</button>
+                        </div>
+                        <div class="trending-card">
+                            <div class="card-icon blue"><i class="fa-solid fa-film"></i></div>
+                            <h3>Motion Graphics</h3>
+                            <p>Timing curves, physics-based animation, and storytelling.</p>
+                            <div class="card-stats">85 Quizzes • 8k Learners</div>
+                            <button class="btn btn-light w-full">Browse Quizzes</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="steps-section">
+                    <h2 class="section-title center">Three Steps to Mastery</h2>
+                    <div class="steps-flow">
+                        <div class="step">
+                            <div class="step-circle"><i class="fa-solid fa-magnifying-glass"></i></div>
+                            <h4>Discover</h4>
+                            <p>Browse our library of thousands of community-verified design quizzes.</p>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step">
+                            <div class="step-circle"><i class="fa-solid fa-rocket"></i></div>
+                            <h4>Challenge</h4>
+                            <p>Put your knowledge to the test with time-based interactive sessions.</p>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step">
+                            <div class="step-circle"><i class="fa-solid fa-chart-line"></i></div>
+                            <h4>Improve</h4>
+                            <p>Get instant feedback and personalized recommendations for growth.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cta-section">
+                    <div class="cta-inner">
+                        <h2 class="cta-title">Ready to test your design IQ?</h2>
+                        <p class="cta-subtitle">Join a community of 50,000+ designers level up their careers every day.
+                        </p>
+                        <button class="btn btn-primary-light"
+                            onclick="document.getElementById('btn-browse').click();">Get Started Free</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        <!-- /VIEW: LANDING -->
+
+
+        <!-- ========================================================
+         VIEW: CATEGORIES
+         ======================================================== -->
+        <section id="categories-view" class="view">
+            <div class="explore-header">
+                <h1 class="section-title center">Explore Knowledge</h1>
+                <p class="section-subtitle center max-w-md mx-auto">Dive into our curated collection of quizzes. From
+                    artistic movements to quantum physics, find the perfect challenge for your curious mind.</p>
+            </div>
+
+            <div id="categories-grid" class="mockup-categories-grid">
+                <!-- Injected by JS -->
+            </div>
+
+            <div class="weekly-special">
+                <div class="weekly-text">
+                    <div class="weekly-pill">Weekly Special</div>
+                    <h2 class="weekly-title">Master the Classics</h2>
+                    <p>This week, we're highlighting our new "Classical Civilizations" series. Unlock exclusive badges
+                        and climb the leaderboards.</p>
+                    <div class="weekly-badges">
+                        <span class="badge"><span class="icon"><i class="fa-regular fa-star"></i></span> Exclusive
+                            Rewards</span>
+                        <span class="badge"><span class="icon"><i class="fa-regular fa-users"></i></span> 1.2k Active
+                            Now</span>
+                    </div>
+                </div>
+                <div class="weekly-image-wrapper">
+                    <div class="weekly-image"></div>
+                    <div class="floating-badge-2">
+                        <div class="fb2-icon"><i class="fa-thin fa-play"></i></div>
+                        <div class="fb2-text"><strong>Recommended For You</strong><br>The Roman Empire: Rise and Fall
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /VIEW: CATEGORIES -->
+
+
+        <!-- ========================================================
+         VIEW: QUIZ INTRO
+         ======================================================== -->
+        <section id="intro-view" class="view">
+            <div class="intro-wrapper">
+                <div class="intro-top-section">
+                    <div class="intro-image-pane"></div>
+                    <div class="intro-content">
+                        <div class="intro-category-tag"><span class="icon-grid"></span> <span
+                                class="tag-text">Quizz</span></div>
+                        <h1 id="intro-title" class="intro-title">Principles of Contemporary Web Design</h1>
+                        <div class="intro-pills">
+                            <div class="intro-pill"><span class="icon-file"></span> <span
+                                    id="intro-question-count">5</span> Questions</div>
+                            <div class="intro-pill"><span class="icon-clock"></span> <span
+                                    id="intro-time-estimate">10</span> Minutes</div>
+                            <div class="intro-pill"><span class="icon-graph"></span> Intermediate</div>
+                        </div>
+                        <div class="intro-desc">
+                            <p><strong>What's covered:</strong></p>
+                            <p class="desc-p"></p>
+                        </div>
+                        <div class="intro-actions">
+                            <button id="btn-start-quiz" class="btn btn-primary btn-large">Start Quiz</button>
+                            <button class="btn btn-ghost ml-4"
+                                onclick="document.getElementById('btn-back-categories').click();">Cancel and Go
+                                Back</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="intro-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon-wrap"><span class="stat-icon-img users"><i
+                                    class="fa-solid fa-users"></i></span></div>
+                        <h3>12,400+</h3>
+                        <p>Students Enrolled</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon-wrap"><span class="stat-icon-img star"><i
+                                    class="fa-regular fa-star"></i></span></div>
+                        <h3>4.8 / 5.0</h3>
+                        <p>Average Rating</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon-wrap"><span class="stat-icon-img badge"><i
+                                    class="fa-solid fa-award"></i></span></div>
+                        <h3>Certificate</h3>
+                        <p>Available on Success</p>
+                    </div>
+                </div>
+
+                <button id="btn-back-categories" style="display:none;"></button>
+            </div>
+        </section>
+        <!-- /VIEW: QUIZ INTRO -->
+
+
+        <!-- ========================================================
+         VIEW: ACTIVE QUIZ
+         ======================================================== -->
+        <section id="quiz-view" class="view">
+            <header class="quiz-header">
+                <div class="quiz-header-top">
+                    <div class="quiz-t-left">Web Design Mastery</div>
+                    <div id="progress-text" class="quiz-t-center">Question 1 of 5</div>
+                    <div class="quiz-t-right">Time Remaining: 14:52</div>
+                </div>
+                <div class="progress-bar-bg">
+                    <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                </div>
+            </header>
+
+            <div class="question-container">
+                <div class="q-card">
+                    <h2 id="question-text" class="headline-md">What is the primary goal of User Experience (UX) design?
+                    </h2>
+                </div>
+                <div id="answers-grid" class="options-grid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+
+            <footer class="quiz-footer">
+                <button class="btn btn-light">Previous Question</button>
+                <button id="btn-next" class="btn btn-primary" disabled>Next Question &rarr;</button>
+            </footer>
+        </section>
+        <!-- /VIEW: ACTIVE QUIZ -->
+
+
+        <!-- ========================================================
+         VIEW: RESULTS
+         ======================================================== -->
+        <section id="results-view" class="view">
+            <div class="results-container">
+                <div class="results-header">
+                    <div class="trophy-icon"><i class="fa-solid fa-trophy" style="color: rgb(252, 255, 59);"></i></div>
+                    <h1 class="results-title">Congratulations!</h1>
+                    <p id="feedback-message" class="results-subtitle">You've mastered this challenge with flying colors.
+                    </p>
+                </div>
+
+                <div class="score-main-card">
+                    <div class="score-label">FINAL SCORE</div>
+                    <div class="score-number-wrapper">
+                        <span id="final-score">5 / 5</span>
+                    </div>
+                    <div class="accuracy-pill">
+                        <span class="icon"><i class="fa-solid fa-check" style="color: rgb(29, 184, 46);"></i></span>
+                        100% Accuracy
+                    </div>
+                </div>
+
+                <div class="results-stats-row">
+                    <div class="stat-box">
+                        <div class="stat-icon star"><i class="fa-regular fa-star"></i></div>
+                        <div class="stat-label">Points Earned</div>
+                        <div class="stat-val">1,250 XP</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon clock">
+                            <i class="fa-duotone fa-solid fa-hourglass-start fa-2xs"
+                                style="--fa-primary-color: rgb(177, 151, 252); --fa-secondary-color: rgb(31, 48, 221);"></i>
+                        </div>
+                        <div class="stat-label">Time Spent</div>
+                        <div class="stat-val">03:42</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon chart"><i class="fa-regular fa-ranking-star"></i></div>
+                        <div class="stat-label">Global Rank</div>
+                        <div class="stat-val">#142</div>
+                    </div>
+                </div>
+
+                <div class="results-summary-box">
+                    <div class="summary-header">
+                        <span>Question Summary</span>
+                        <a href="#" class="view-details">View Details</a>
+                    </div>
+                    <div class="summary-item">
+                        <div class="item-num">1</div>
+                        <div class="item-text">
+                            <strong>The capital of France?</strong>
+                            <span>Correct Answer: Paris</span>
+                        </div>
+                        <div class="item-status correct"><i class="fa-solid fa-check"></i></div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="item-num">2</div>
+                        <div class="item-text">
+                            <strong>Largest planet in our solar system?</strong>
+                            <span>Correct Answer: Jupiter</span>
+                        </div>
+                        <div class="item-status correct"><i class="fa-solid fa-check"></i></div>
+                    </div>
+                    <div class="show-all">Show all questions <i class="fa-solid fa-chevron-right"></i></div>
+                </div>
+
+                <div class="results-actions">
+                    <button id="btn-retry" class="btn btn-primary"><span class="icon">↻</span> Play Again</button>
+                    <button id="btn-home" class="btn btn-white"><span class="icon"><i
+                                class="fa-solid fa-house"></i></span> Back to Home</button>
+                </div>
+            </div>
+        </section>
+        <!-- /VIEW: RESULTS -->
+
+
+        <!-- ========================================================
+         VIEW: LEADERBOARD
+         ======================================================== -->
+        <section id="leaderboard-view" class="view">
+            <div class="explore-header">
+                <h1 class="section-title center">Global Leaderboard</h1>
+                <p class="section-subtitle center max-w-md mx-auto">See how you rank against the top minds in the
+                    QuizMind community.</p>
+            </div>
+            <div class="leaderboard-container">
+                <div id="leaderboard-list">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </section>
+        <!-- /VIEW: LEADERBOARD -->
+
+
+        <!-- ========================================================
+         VIEW: MY QUIZZES
+         ======================================================== -->
+        <section id="my-quizzes-view" class="view">
+            <div class="explore-header">
+                <h1 class="section-title center">My Quizzes</h1>
+                <p class="section-subtitle center max-w-md mx-auto">Resume your active challenges or review your
+                    completed triumphs.</p>
+            </div>
+            <div class="my-quizzes-container">
+                <div id="my-quizzes-list" class="mockup-categories-grid">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </section>
+        <!-- /VIEW: MY QUIZZES -->
+
+
+    </main>
+    <!-- /MAIN -->
+
+
+    <!-- ============================================================
+     FOOTER
+     ============================================================ -->
+    <footer class="global-footer">
+        <div class="footer-inner">
+            <div class="footer-left">
+                <div class="logo logo-sm">QuizMind</div>
+            </div>
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Help Center</a>
+                <a href="#">Contact</a>
+            </div>
+            <div class="footer-social">
+                <span class="social-icon"><i class="fa-brands fa-twitter"></i></span>
+                <span class="social-icon"><i class="fa-regular fa-envelope"></i></span>
+            </div>
+        </div>
+    </footer>
+    <!-- /FOOTER -->
+
+
+    <!-- ============================================================
+     MODAL: HOW IT WORKS
+     ============================================================ -->
+    <div id="how-it-works-modal" class="hiw-overlay" aria-hidden="true">
+        <div class="hiw-modal" role="dialog" aria-modal="true" aria-labelledby="hiw-title">
+            <button class="hiw-close" id="hiw-close-btn" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            <div class="hiw-header">
+                <div class="hiw-pill">Quick Guide</div>
+                <h2 id="hiw-title" class="hiw-title">How QuizMind Works</h2>
+                <p class="hiw-subtitle">Three simple steps to sharpen your skills every day.</p>
+            </div>
+            <div class="hiw-steps">
+                <div class="hiw-step" style="--delay:0.1s">
+                    <div class="hiw-step-num">01</div>
+                    <div class="hiw-step-circle"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <div class="hiw-step-body">
+                        <h3>Discover</h3>
+                        <p>Browse our curated library of quizzes across design, logic, motion, and more. Filter by topic
+                            or difficulty to find your perfect challenge.</p>
+                    </div>
+                </div>
+                <div class="hiw-connector"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="hiw-step" style="--delay:0.2s">
+                    <div class="hiw-step-num">02</div>
+                    <div class="hiw-step-circle"><i class="fa-solid fa-rocket"></i></div>
+                    <div class="hiw-step-body">
+                        <h3>Challenge</h3>
+                        <p>Each quiz is timed. Answer questions, navigate back if needed, and race the clock. Your score
+                            updates in real time — no double-counting, ever.</p>
+                    </div>
+                </div>
+                <div class="hiw-connector"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="hiw-step" style="--delay:0.3s">
+                    <div class="hiw-step-num">03</div>
+                    <div class="hiw-step-circle"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="hiw-step-body">
+                        <h3>Improve</h3>
+                        <p>Review your detailed results summary, check the leaderboard, and resume saved quizzes from
+                            "My Quizzes" — your progress is always saved.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hiw-actions">
+                <button class="btn btn-primary" id="hiw-start-btn">Start Exploring</button>
+                <button class="btn btn-ghost" id="hiw-dismiss-btn">Maybe Later</button>
+            </div>
+        </div>
+    </div>
+    <!-- /MODAL: HOW IT WORKS -->
+
+
+    <!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+    <script src="auth.js"></script>
+    <script type="module" src="app.js"></script>
+
+</body>
+
+</html>
