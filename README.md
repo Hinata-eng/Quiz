@@ -1,382 +1,567 @@
-# QuizMind
+import { quizzes } from './data.js'
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![Font Awesome](https://img.shields.io/badge/Font_Awesome-528DD7?style=for-the-badge&logo=fontawesome&logoColor=white)
-![Responsive](https://img.shields.io/badge/Responsive-Design-4F46E5?style=for-the-badge)
-![No Framework](https://img.shields.io/badge/No_Framework-Vanilla_JS-green?style=for-the-badge)
+// ─── State ───────────────────────────────────────────────────────────────────
+let activeQuizState = null;
+let timerInterval   = null;
+let timeRemaining   = 0;
+let quizStartTime   = null;
 
-> A modern, fully responsive, frontend-only interactive quiz platform built with vanilla HTML, CSS, and JavaScript. QuizMind delivers a polished, production-grade learning experience — from curated quiz categories and real-time scoring to a global leaderboard and personal progress tracking.
+// ─── DOM refs ────────────────────────────────────────────────────────────────
+const views = {
+    landing:     document.getElementById('landing-view'),
+    categories:  document.getElementById('categories-view'),
+    intro:       document.getElementById('intro-view'),
+    quiz:        document.getElementById('quiz-view'),
+    results:     document.getElementById('results-view'),
+    leaderboard: document.getElementById('leaderboard-view'),
+    myQuizzes:   document.getElementById('my-quizzes-view'),
+};
 
----
+const navLinks = {
+    landing:     document.getElementById('nav-browse'),
+    categories:  document.getElementById('nav-categories'),
+    leaderboard: document.getElementById('nav-leaderboard'),
+    myQuizzes:   document.getElementById('nav-my-quizzes'),
+};
 
-## Table of Contents
-
-- [Introduction](#introduction)
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Project Structure](#project-structure)
-- [Authentication System](#authentication-system)
-- [Quiz System](#quiz-system)
-- [LocalStorage Architecture](#localstorage-architecture)
-- [Responsive Design](#responsive-design)
-- [Mobile Navigation](#mobile-navigation)
-- [UI/UX Design Highlights](#uiux-design-highlights)
-- [Installation and Usage](#installation-and-usage)
-- [Future Improvements](#future-improvements)
-
----
-
-## Introduction
-
-QuizMind is a feature-rich, single-page quiz platform designed to showcase modern frontend development practices without relying on any CSS framework or JavaScript library. Every interaction — from animated page transitions to real-time score tracking — is engineered from scratch using clean, organized vanilla code.
-
-The platform is structured around a multi-view SPA (Single Page Application) architecture where all views are rendered and managed entirely in the browser. Users can browse categorized quizzes, take timed challenges, track their performance in a personal dashboard, and compete on a global leaderboard — all without a single page reload.
-
-This project was built as a frontend portfolio piece to demonstrate mastery of JavaScript DOM manipulation, CSS architecture, responsive design, client-side state management, and thoughtful UX engineering.
-
----
-
-## Features
-
-**Core Platform**
-
-- Multi-view single-page application with animated view transitions
-- Browser History API integration — the back button navigates correctly between views
-- Dark mode with system preference detection and persistent user preference via localStorage
-- Fully responsive layout that adapts seamlessly from desktop to mobile
-
-**Quiz Experience**
-
-- Dynamic quiz rendering driven entirely by a structured JavaScript data file
-- Per-category timed quizzes with a live countdown timer
-- Previous and Next question navigation with answer persistence — revisiting a question restores the previously selected answer
-- Correct answer scoring computed from an index-map structure, ensuring no double-counting regardless of navigation direction
-- Animated progress bar tracking completion across questions
-- Detailed results screen with per-question breakdown, accuracy percentage, and real time-spent calculation
-
-**User System**
-
-- Username-based authentication with sign-in, session persistence, and sign-out
-- Protected views that require authentication before access
-- Auth guard system redirecting unauthenticated users to the login flow
-
-**Progress and Leaderboard**
-
-- Per-category quiz progress saved automatically to localStorage
-- Resume interrupted quizzes from exactly where you left off
-- Completed quiz review — click any finished quiz to re-read your results
-- Global leaderboard aggregated from all stored user scores
-- Personal "My Quizzes" dashboard showing progress, completion status, and scores
-
-**Landing Page**
-
-- Hero section with call-to-action buttons
-- Trending categories section with direct links to quiz intros
-- Three-step visual guide with smooth scroll behavior triggered by the "See How It Works" button
-- Animated CTA section
-
----
-
-## Technologies Used
-
-| Technology | Purpose |
-|---|---|
-| HTML5 | Semantic document structure and SPA view scaffolding |
-| CSS3 | Custom design system, animations, dark mode, responsive layout |
-| Vanilla JavaScript (ES6+) | SPA routing, DOM rendering, state management, quiz logic |
-| CSS Custom Properties | Centralized theming and dark mode switching |
-| CSS Grid and Flexbox | All layout systems — no external grid framework used |
-| Font Awesome 7 | Icon library for UI elements throughout the platform |
-| Google Fonts (Inter, Manrope) | Typography — clean, modern sans-serif font pairing |
-| Browser History API | SPA navigation with back/forward button support |
-| localStorage API | Authentication, quiz progress, scores, and theme persistence |
-
-No CSS frameworks (Bootstrap, Tailwind), no JavaScript libraries (React, Vue, jQuery), and no build tools are required. The entire project runs directly in the browser from static files.
-
----
-
-## Project Structure
-
-```
-quizmind/
-│
-├── index.html              # Single HTML file containing all view templates
-├── style.css               # Complete custom CSS design system
-├── app.js                  # Main application logic — routing, rendering, state
-├── data.js                 # Quiz data source — categories, questions, answers
-│
-└── images/
-    ├── landingpage1.jpg    # Hero section background image
-    ├── logicIQ.jpg         # Logic and IQ category cover
-    ├── webdesign.jpg       # Web Design category cover
-    ├── ux.jpg              # UX Design category cover
-    └── motiondesign.jpg    # Motion Graphics category cover
-```
-
-The architecture follows a clear separation of concerns: structure in HTML, presentation in CSS, behavior in JavaScript, and content in data.js. All views are defined in `index.html` and toggled by JavaScript — only one view is visible at a time using a CSS `.active` class managed by the `switchView()` function.
-
----
-
-## Authentication System
-
-QuizMind implements a lightweight, frontend-only authentication system designed to simulate the behavior of a real auth flow without a backend.
-
-**How it works:**
-
-When a user clicks "Sign In", they are prompted to enter a username. This username is immediately persisted to localStorage under the key `quizUser`. On every subsequent page load, the application checks for this key during initialization and restores the authenticated session automatically — the user remains signed in across browser sessions.
-
-```javascript
-// Session check on init
-const savedUser = localStorage.getItem('quizUser');
-if (savedUser) updateAuthUI(savedUser);
-```
-
-The auth state drives several behaviors across the platform:
-
-- The navigation header updates to display "Hi, [username]" when authenticated
-- Quiz scores are saved under a user-specific key (`quizScores_username`), meaning scores are tied to individual accounts
-- The leaderboard aggregates scores across all stored user sessions, so multiple users on the same device can compete
-- Protected views check for an active session before rendering sensitive content
-
-While this system uses localStorage rather than server-side tokens, it accurately mirrors the structural patterns of real authentication — session persistence, user-scoped data, and UI state driven by auth status — making it a valid demonstration of auth flow architecture in a frontend context.
-
----
-
-## Quiz System
-
-The quiz engine is the core of the application. Every quiz is driven dynamically from the `data.js` file, which exports a structured object where each key is a category name and its value is an array of question objects.
-
-**Data structure per question:**
-
-```javascript
-{
-    image: "images/category.jpg",       // Category cover image (first question only)
-    description: "Quiz description...", // Shown on the intro page (first question only)
-    timeLimit: 240,                     // Total seconds for the quiz (first question only)
-    question: "Question text here?",
-    answers: ["Option A", "Option B", "Option C", "Option D"],
-    correct: 1                          // Zero-based index of the correct answer
+// ─── History API ─────────────────────────────────────────────────────────────
+function pushState(viewName, extra = {}) {
+    history.pushState({ view: viewName, ...extra }, '', '#' + viewName);
 }
-```
 
-**Answer tracking with an index map:**
-
-A critical design decision is storing answers as an object map (`{ questionIndex: selectedAnswerIndex }`) rather than a sequential array. This approach solves the classic previous-button scoring bug:
-
-```javascript
-// Answers stored as a map
-activeQuizState.answers = { 0: 2, 1: 0, 3: 1 }
-
-// Score calculated by iterating all questions exactly once
-questions.forEach((q, i) => {
-    if (activeQuizState.answers[i] === q.correct) score++;
+window.addEventListener('popstate', (e) => {
+    const state = e.state;
+    if (!state) { renderLanding(false); return; }
+    switch (state.view) {
+        case 'landing':     renderLanding(false);    break;
+        case 'categories':  renderCategories(false); break;
+        case 'intro':       state.category ? renderQuizIntro(state.category, false) : renderCategories(false); break;
+        case 'leaderboard': renderLeaderboard(false); break;
+        case 'myQuizzes':   renderMyQuizzes(false);  break;
+        case 'quiz':        activeQuizState ? renderQuestion(false)  : renderCategories(false); break;
+        case 'results':     activeQuizState ? renderResults(false)   : renderCategories(false); break;
+        default:            renderLanding(false);
+    }
 });
-```
 
-This means:
+// ─── Init ────────────────────────────────────────────────────────────────────
+function init() {
 
-- Navigating back to a question and changing the answer simply overwrites the map entry — no duplication
-- Skipping a question leaves its index undefined — counted as incorrect and shown as unanswered in the summary
-- The score is always computed at results time from the final state of the map, never incremented in real time
+    // ── Dark mode ─────────────────────────────────────────────────────────────
+    const themeBtn   = document.getElementById('theme-toggle');
+    const savedTheme = localStorage.getItem('theme');
 
-**Quiz lifecycle:**
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.body.classList.add('dark');
+        themeBtn.innerHTML = `<i class="fa-solid fa-sun"></i>`;
+    } else {
+        themeBtn.innerHTML = `<i class="fa-solid fa-moon"></i>`;
+    }
 
-1. User selects a category from the categories grid
-2. Quiz intro view shows the description, question count, and time estimate
-3. On "Start Quiz", the state object is initialized and the timer starts
-4. Each question is rendered from the data array with answer options built dynamically
-5. Selecting an option enables the Next button; the selection is stored in the answers map
-6. On the last question, "Next" becomes "Finish Quiz"
-7. Results are calculated from the final answers map, saved to localStorage, and the results view is rendered
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        if (document.body.classList.contains('dark')) {
+            localStorage.setItem('theme', 'dark');
+            themeBtn.innerHTML = `<i class="fa-solid fa-sun"></i>`;
+        } else {
+            localStorage.setItem('theme', 'light');
+            themeBtn.innerHTML = `<i class="fa-solid fa-moon"></i>`;
+        }
+    });
 
----
+    // ── Desktop nav ───────────────────────────────────────────────────────────
+    if (navLinks.landing)     navLinks.landing.addEventListener('click',     e => { e.preventDefault(); renderLanding(); });
+    if (navLinks.categories)  navLinks.categories.addEventListener('click',  e => { e.preventDefault(); renderCategories(); });
+    if (navLinks.leaderboard) navLinks.leaderboard.addEventListener('click', e => { e.preventDefault(); renderLeaderboard(); });
+    if (navLinks.myQuizzes)   navLinks.myQuizzes.addEventListener('click',   e => { e.preventDefault(); renderMyQuizzes(); });
 
-## LocalStorage Architecture
+    // ── Landing buttons ───────────────────────────────────────────────────────
+    document.getElementById('btn-browse')?.addEventListener('click', renderCategories);
+    document.getElementById('btn-get-started')?.addEventListener('click', renderCategories);
+    document.getElementById('btn-back-categories')?.addEventListener('click', renderCategories);
 
-All client-side persistence is organized under clearly namespaced localStorage keys:
+    document.querySelector('.btn-outline')?.addEventListener('click', openHowItWorksModal);
+    document.querySelectorAll('.step').forEach(s => {
+        s.style.cursor = 'pointer';
+        s.addEventListener('click', openHowItWorksModal);
+    });
 
-| Key | Value | Purpose |
-|---|---|---|
-| `quizUser` | `"username"` | Active authenticated session |
-| `theme` | `"dark"` or `"light"` | User's preferred color scheme |
-| `quizProgress_[Category]` | Serialized state object | Saves mid-quiz progress per category |
-| `quizScores_[username]` | Array of score objects | Stores best scores per user per category |
+    document.querySelector('.explore-link')?.addEventListener('click', e => { e.preventDefault(); renderCategories(); });
 
-Quiz progress objects include the current question index and the full answers map, enabling complete mid-session restoration. When a user resumes a quiz, their previously selected answers are visually restored on each question as they navigate.
+    const trendingCategories = ['Web Design', 'UX Design', 'Motion Graphics'];
+    document.querySelectorAll('.trending-card .btn-light').forEach((btn, i) => {
+        btn.removeAttribute('onclick');
+        btn.addEventListener('click', () => {
+            renderCategories(true);
+            setTimeout(() => renderQuizIntro(trendingCategories[i]), 50);
+        });
+    });
 
-Score objects track the category name, score, total questions, and timestamp, enabling accurate leaderboard construction by iterating all `quizScores_*` keys at render time.
+    // ── Modal ─────────────────────────────────────────────────────────────────
+    const modal = document.getElementById('how-it-works-modal');
+    if (modal) {
+        document.getElementById('hiw-close-btn')?.addEventListener('click', closeHowItWorksModal);
+        document.getElementById('hiw-dismiss-btn')?.addEventListener('click', closeHowItWorksModal);
+        document.getElementById('hiw-start-btn')?.addEventListener('click', () => { closeHowItWorksModal(); renderCategories(); });
+        modal.addEventListener('click', e => { if (e.target === modal) closeHowItWorksModal(); });
+    }
 
----
+    // ── Quiz actions ──────────────────────────────────────────────────────────
+    document.getElementById('btn-start-quiz')?.addEventListener('click', () => startQuizFromIntro(true));
+    document.getElementById('btn-next')?.addEventListener('click', handleNextQuestion);
+    document.getElementById('btn-retry')?.addEventListener('click', startQuizFromResults);
+    document.getElementById('btn-home')?.addEventListener('click', renderCategories);
 
-## Responsive Design
+    // Previous question
+    document.querySelector('.quiz-footer .btn-light')?.addEventListener('click', () => {
+        if (!activeQuizState || activeQuizState.currentQuestionIndex === 0) return;
+        activeQuizState.currentQuestionIndex--;
+        renderQuestion(false);
+    });
 
-QuizMind is built mobile-first with a three-tier responsive layout system defined entirely in custom CSS using media queries.
+    // ── Logo ──────────────────────────────────────────────────────────────────
+    document.querySelector('.logo')?.addEventListener('click', () => renderLanding());
 
-**Breakpoints:**
+    // ── Hamburger / Mobile Drawer ─────────────────────────────────────────────
+    const hamburgerBtn   = document.getElementById('hamburger-btn');
+    const mobileDrawer   = document.getElementById('mobile-drawer');
+    const drawerBackdrop = document.getElementById('drawer-backdrop');
 
-| Breakpoint | Target | Key layout changes |
-|---|---|---|
-| Default (> 1024px) | Desktop | Two-column hero, three-column grids, side-by-side intro layout |
-| max-width: 1024px | Tablet | Single-column hero, two-column category grid, stacked intro |
-| max-width: 768px | Mobile | Single-column everything, hidden desktop nav, stacked quiz footer |
-| max-width: 420px | Small mobile | Reduced typography scale, tighter spacing |
+    function openDrawer() {
+        hamburgerBtn.classList.add('open');
+        mobileDrawer.classList.add('open');
+        drawerBackdrop.classList.add('open');
+        mobileDrawer.setAttribute('aria-hidden', 'false');
+        hamburgerBtn.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer() {
+        hamburgerBtn.classList.remove('open');
+        mobileDrawer.classList.remove('open');
+        drawerBackdrop.classList.remove('open');
+        mobileDrawer.setAttribute('aria-hidden', 'true');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
 
-The layout engine uses CSS Grid for all multi-column sections and Flexbox for component-level alignment. No fixed widths are used on container elements — all layouts flow naturally within their responsive context.
+    hamburgerBtn?.addEventListener('click', () =>
+        hamburgerBtn.classList.contains('open') ? closeDrawer() : openDrawer()
+    );
+    drawerBackdrop?.addEventListener('click', closeDrawer);
 
-Notable responsive behaviors include the categories grid collapsing from a 3-2-1 column layout, the quiz footer buttons stacking vertically on mobile, the results stats row shifting to a single column, and the hero section reorganizing from a two-column split to a stacked layout.
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') { closeDrawer(); closeHowItWorksModal(); }
+    });
 
----
+    function updateMobActive(activeId) {
+        document.querySelectorAll('.mob-nav-link').forEach(l => l.classList.remove('active'));
+        document.getElementById(activeId)?.classList.add('active');
+    }
 
-## Mobile Navigation
+    const mobNavActions = {
+        'mob-nav-browse':      () => { renderLanding();     updateMobActive('mob-nav-browse'); },
+        'mob-nav-categories':  () => { renderCategories();  updateMobActive('mob-nav-categories'); },
+        'mob-nav-leaderboard': () => { renderLeaderboard(); updateMobActive('mob-nav-leaderboard'); },
+        'mob-nav-my-quizzes':  () => { renderMyQuizzes();   updateMobActive('mob-nav-my-quizzes'); },
+    };
+    Object.entries(mobNavActions).forEach(([id, fn]) => {
+        document.getElementById(id)?.addEventListener('click', e => { e.preventDefault(); fn(); closeDrawer(); });
+    });
 
-On mobile viewports, the desktop navigation bar is hidden and replaced with a hamburger menu drawer. The drawer slides in from the side as an overlay, providing full navigation access without consuming permanent screen space.
+    document.getElementById('mob-get-started-btn')?.addEventListener('click', () => { renderCategories(); closeDrawer(); });
 
-**Implementation details:**
-
-- A hamburger icon button appears in the header on mobile, replacing the inline nav links
-- Clicking the icon toggles a class on the body, triggering a CSS transition on the drawer panel
-- The drawer contains all navigation links, the theme toggle, and the auth controls
-- Tapping any nav link or the overlay backdrop closes the drawer automatically
-- The transition uses CSS `transform: translateX()` for GPU-accelerated animation, keeping the interaction smooth on low-powered mobile devices
-
----
-
-## UI/UX Design Highlights
-
-QuizMind was designed to feel like a polished commercial product. Every visual and interaction decision was deliberate.
-
-**Design system:**
-
-All colors, shadows, and spacing are defined as CSS custom properties on `:root`, with a parallel dark mode override block on `body.dark`. The entire visual theme switches with a single class toggle — only the class changes, CSS handles the rest.
-
-```css
-:root {
-    --color-primary: #4F46E5;
-    --color-background: #F4F7FB;
-    --color-surface: #FFFFFF;
+    // ── Boot ──────────────────────────────────────────────────────────────────
+    history.replaceState({ view: 'landing' }, '', '#landing');
+    renderLanding(false);
 }
 
-body.dark {
-    --color-background: #0B1220;
-    --color-surface: #111827;
-    --color-primary: #818CF8;
+// ─── View Switcher ───────────────────────────────────────────────────────────
+function switchView(viewName, navName) {
+    Object.values(views).forEach(v => { if (v) v.classList.remove('active'); });
+    if (views[viewName]) views[viewName].classList.add('active');
+    Object.values(navLinks).forEach(l => { if (l) l.classList.remove('active'); });
+    if (navName && navLinks[navName]) navLinks[navName].classList.add('active');
 }
-```
 
-**Interaction polish:**
+// ─── Render Functions ────────────────────────────────────────────────────────
+function renderLanding(addHistory = true) {
+    if (addHistory) pushState('landing');
+    switchView('landing', 'landing');
+}
 
-- View transitions use a `fadeIn` keyframe animation — each new view fades up from a slight vertical offset, giving the SPA a native-app feel
-- Buttons apply `transform: translateY(-1px)` on hover with a subtle box-shadow transition
-- Category and quiz cards lift with `transform: translateY(-4px)` on hover
-- Option cards show a highlighted selection ring using `box-shadow` and border-color change
-- The progress bar width animates with a 0.4s ease transition on every question advance
-- The timer display updates every second with zero layout shift
+function renderCategories(addHistory = true) {
+    if (addHistory) pushState('categories');
+    switchView('categories', 'categories');
 
-**Typography:**
+    const grid = document.getElementById('categories-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    Object.keys(quizzes).forEach(category => {
+        const firstQ = quizzes[category][0];
+        const card   = document.createElement('div');
+        card.className = 'category-card';
+        card.innerHTML = `<img src="${firstQ.image}" alt="${category}"><h3>${category}</h3>`;
+        card.addEventListener('click', () => renderQuizIntro(category));
+        grid.appendChild(card);
+    });
+}
 
-The platform uses a two-font pairing: Inter for body text and UI elements, and Manrope for headings. Font weights range from 400 to 800, with heavier weights reserved for hero titles and score displays to create clear visual hierarchy.
+function renderQuizIntro(categoryStr, addHistory = true) {
+    if (addHistory) pushState('intro', { category: categoryStr });
+    switchView('intro', 'categories');
 
-**Color and depth:**
+    const categoryData   = quizzes[categoryStr];
+    const questionsCount = categoryData ? categoryData.length : 0;
+    const firstQ         = categoryData ? categoryData[0] : null;
 
-Cards and surfaces use layered shadows from a custom shadow scale (`--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-float`) rather than flat borders alone. This creates a sense of depth and elevation that guides the user's eye to interactive elements.
+    document.getElementById('intro-title').textContent          = categoryStr;
+    document.getElementById('intro-question-count').textContent = questionsCount;
+    document.getElementById('intro-time-estimate').textContent  =
+        Math.ceil(((firstQ && firstQ.timeLimit) ? firstQ.timeLimit : questionsCount * 30) / 60);
 
----
+    const descP = document.querySelector('.intro-desc .desc-p');
+    if (descP && firstQ?.description) descP.textContent = firstQ.description;
 
-## Installation and Usage
+    const introImagePane = document.querySelector('.intro-image-pane');
+    if (introImagePane && firstQ?.image) {
+        introImagePane.style.backgroundImage    = `url('${firstQ.image}')`;
+        introImagePane.style.backgroundSize     = 'cover';
+        introImagePane.style.backgroundPosition = 'center';
+    }
 
-QuizMind requires no build tools, package managers, or server configuration. It runs directly from any static file server.
+    const btnStart  = document.getElementById('btn-start-quiz');
+    const resumeBtn = document.getElementById('btn-resume-quiz');
+    const existing  = localStorage.getItem('quizProgress_' + categoryStr);
 
-**Option 1 — VS Code Live Server (recommended):**
+    if (existing) {
+        const saved      = JSON.parse(existing);
+        const inProgress = saved.currentQuestionIndex > 0 && saved.currentQuestionIndex < questionsCount;
+        btnStart.textContent = inProgress ? 'Restart Quiz' : 'Start Quiz';
+        if (inProgress && !resumeBtn) {
+            const btnResume = document.createElement('button');
+            btnResume.id        = 'btn-resume-quiz';
+            btnResume.className = 'btn btn-primary-light btn-large';
+            btnResume.style.marginLeft = '8px';
+            btnResume.textContent = 'Resume Quiz';
+            btnResume.addEventListener('click', () => startQuizFromIntro(false));
+            btnStart.parentNode.insertBefore(btnResume, btnStart.nextSibling);
+        } else if (!inProgress && resumeBtn) {
+            resumeBtn.remove();
+        }
+    } else {
+        btnStart.textContent = 'Start Quiz';
+        if (resumeBtn) resumeBtn.remove();
+    }
+}
 
-1. Install the [Live Server extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) in VS Code
-2. Open the project folder in VS Code
-3. Right-click `index.html` and select "Open with Live Server"
-4. The app opens at `http://127.0.0.1:5500`
+// ─── Quiz Engine ─────────────────────────────────────────────────────────────
+function saveProgress(state) {
+    localStorage.setItem('quizProgress_' + state.category, JSON.stringify(state));
+}
 
-**Option 2 — Python local server:**
+function startQuizFromIntro(forceRestart) {
+    const category = document.getElementById('intro-title').textContent;
+    if (forceRestart) {
+        activeQuizState = { category, currentQuestionIndex: 0, score: 0, answers: [], answersMap: {} };
+    } else {
+        const existing = localStorage.getItem('quizProgress_' + category);
+        activeQuizState = existing
+            ? JSON.parse(existing)
+            : { category, currentQuestionIndex: 0, score: 0, answers: [], answersMap: {} };
+    }
+    saveProgress(activeQuizState);
 
-```bash
-git clone https://github.com/your-username/quizmind.git
-cd quizmind
-python -m http.server 8000
-# Open http://localhost:8000
-```
+    const firstQ = quizzes[category]?.[0];
+    timeRemaining = (firstQ && firstQ.timeLimit) ? firstQ.timeLimit : quizzes[category].length * 30;
+    quizStartTime = Date.now();
+    startTimer();
+    renderQuestion();
+}
 
-**Option 3 — Node.js:**
+function startTimer() {
+    const timerDisplay = document.querySelector('.quiz-t-right');
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        if (timeRemaining <= 0) { clearInterval(timerInterval); renderResults(); return; }
+        timeRemaining--;
+        const m = Math.floor(timeRemaining / 60);
+        const s = timeRemaining % 60;
+        if (timerDisplay) timerDisplay.textContent = `Time Remaining: ${m}:${s < 10 ? '0' : ''}${s}`;
+    }, 1000);
+}
 
-```bash
-git clone https://github.com/your-username/quizmind.git
-cd quizmind
-npx serve .
-# Open the URL shown in the terminal
-```
+function startQuizFromResults() {
+    if (!activeQuizState) { renderCategories(); return; }
+    activeQuizState.currentQuestionIndex = 0;
+    activeQuizState.score    = 0;
+    activeQuizState.answers  = [];
+    activeQuizState.answersMap = {};
+    saveProgress(activeQuizState);
 
-> Note: Because `app.js` and `data.js` use ES6 module syntax (`import`/`export`), browsers block module loading from `file://` URLs. Always use a local server rather than opening `index.html` directly.
+    const firstQ = quizzes[activeQuizState.category]?.[0];
+    timeRemaining = (firstQ && firstQ.timeLimit) ? firstQ.timeLimit : quizzes[activeQuizState.category].length * 30;
+    quizStartTime = Date.now();
+    startTimer();
+    renderQuestion();
+}
 
-**Adding quiz content:**
+function renderQuestion(addHistory = true) {
+    if (addHistory) pushState('quiz');
+    switchView('quiz', 'categories');
 
-All quiz data lives in `data.js`. To add a new category, add a new key to the exported `quizzes` object following the existing structure, and add a cover image to the `images/` folder. The categories grid, intro page, and My Quizzes dashboard will all reflect it automatically — no other changes are needed.
+    if (!activeQuizState || !quizzes[activeQuizState.category]) { renderCategories(); return; }
 
----
+    const questions = quizzes[activeQuizState.category];
+    const qData     = questions[activeQuizState.currentQuestionIndex];
 
-## Future Improvements
+    const qTopLeft = document.querySelector('.quiz-t-left');
+    if (qTopLeft) qTopLeft.textContent = activeQuizState.category;
 
-**Backend integration**
+    document.getElementById('progress-text').textContent =
+        `Question ${activeQuizState.currentQuestionIndex + 1} of ${questions.length}`;
 
-Migrating from localStorage to a real backend (Node.js + Express or a service like Supabase) would enable genuine multi-user authentication, server-side score persistence, and a truly global leaderboard shared across all devices and sessions.
+    const barFill = document.getElementById('progress-bar-fill');
+    if (barFill) barFill.style.width = `${(activeQuizState.currentQuestionIndex / questions.length) * 100}%`;
 
-**User profiles**
+    document.getElementById('question-text').textContent = qData.question;
 
-A dedicated profile page showing total quizzes completed, average accuracy, time spent, strongest categories, and earned badges would add significant depth to the personal progress system.
+    const answersGrid = document.getElementById('answers-grid');
+    answersGrid.innerHTML = '';
+    delete answersGrid.dataset.selectedIndex;
 
-**Quiz creation**
+    const btnNext = document.getElementById('btn-next');
+    btnNext.disabled  = true;
+    btnNext.innerHTML = activeQuizState.currentQuestionIndex >= questions.length - 1
+        ? 'Finish Quiz &rarr;' : 'Next Question &rarr;';
 
-An in-browser quiz builder allowing authenticated users to create, publish, and share their own quiz categories would transform QuizMind from a content-consumption platform into a community-driven one.
+    const btnPrev = document.querySelector('.quiz-footer .btn-light');
+    if (btnPrev) btnPrev.disabled = activeQuizState.currentQuestionIndex === 0;
 
-**Advanced question types**
+    qData.answers.forEach((answerStr, index) => {
+        const card = document.createElement('div');
+        card.className = 'option-card';
+        card.textContent = answerStr;
 
-Beyond multiple-choice, supporting true/false, fill-in-the-blank, image-based questions, and ordered ranking would make the quiz engine significantly more versatile.
+        const prevAnswer = activeQuizState.answersMap?.[activeQuizState.currentQuestionIndex];
+        if (prevAnswer === index) {
+            card.classList.add('selected');
+            answersGrid.dataset.selectedIndex = index;
+            btnNext.disabled = false;
+        }
 
-**Spaced repetition**
+        card.addEventListener('click', () => {
+            Array.from(answersGrid.children).forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            answersGrid.dataset.selectedIndex = index;
+            btnNext.disabled = false;
+        });
+        answersGrid.appendChild(card);
+    });
+}
 
-Tracking which questions a user gets wrong and surfacing them in future sessions using a spaced repetition algorithm would improve long-term knowledge retention.
+function handleNextQuestion() {
+    const answersGrid = document.getElementById('answers-grid');
+    const selectedStr = answersGrid.dataset.selectedIndex;
+    if (!selectedStr) return;
 
-**Accessibility**
+    const selectedIdx = parseInt(selectedStr, 10);
+    const questions   = quizzes[activeQuizState.category];
+    const currentIdx  = activeQuizState.currentQuestionIndex;
 
-Full WCAG 2.1 AA compliance including keyboard navigation throughout the quiz flow, ARIA live regions for timer updates, focus management on view transitions, and sufficient color contrast in all theme variants.
+    if (!activeQuizState.answersMap) activeQuizState.answersMap = {};
+    activeQuizState.answersMap[currentIdx] = selectedIdx;
 
-**PWA support**
+    activeQuizState.answers = questions.map((_, i) =>
+        activeQuizState.answersMap[i] !== undefined ? activeQuizState.answersMap[i] : -1
+    );
+    activeQuizState.score = questions.reduce((acc, q, i) =>
+        activeQuizState.answersMap[i] === q.correct ? acc + 1 : acc, 0
+    );
 
-Adding a service worker and web app manifest would allow QuizMind to be installed on mobile home screens and function offline, significantly improving the mobile experience.
+    activeQuizState.currentQuestionIndex++;
+    saveProgress(activeQuizState);
 
----
+    if (activeQuizState.currentQuestionIndex >= questions.length) {
+        const barFill = document.getElementById('progress-bar-fill');
+        if (barFill) barFill.style.width = '100%';
+        setTimeout(renderResults, 400);
+    } else {
+        renderQuestion();
+    }
+}
 
-## Contributing
+function renderResults(addHistory = true) {
+    clearInterval(timerInterval);
+    if (addHistory) pushState('results');
+    switchView('results', 'categories');
 
-Contributions, issues, and feature requests are welcome.
+    if (!activeQuizState) { renderCategories(); return; }
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-feature-name`
-3. Commit your changes: `git commit -m 'Add: brief description'`
-4. Push to the branch: `git push origin feature/your-feature-name`
-5. Open a Pull Request with a clear description of the change
+    const questions = quizzes[activeQuizState.category];
+    const total     = questions.length;
 
----
+    // Use currentUser (set by auth.js) to save scores
+    const user = localStorage.getItem('currentUser');
+    if (user) {
+        const key    = `quizScores_${user}`;
+        const scores = JSON.parse(localStorage.getItem(key)) || [];
+        const existing = scores.find(s => s.category === activeQuizState.category);
+        if (!existing) {
+            scores.push({ category: activeQuizState.category, score: activeQuizState.score, total, date: new Date().toISOString() });
+        } else if (activeQuizState.score > existing.score) {
+            Object.assign(existing, { score: activeQuizState.score, total, date: new Date().toISOString() });
+        }
+        localStorage.setItem(key, JSON.stringify(scores));
+    }
 
-## License
+    document.getElementById('final-score').textContent = `${activeQuizState.score} / ${total}`;
 
-This project is licensed under the MIT License. You are free to use, modify, and distribute it for personal or commercial purposes with attribution.
+    if (quizStartTime) {
+        const elapsed = Math.floor((Date.now() - quizStartTime) / 1000);
+        const mins = Math.floor(elapsed / 60);
+        const secs = elapsed % 60;
+        document.querySelectorAll('.stat-box').forEach(box => {
+            if (box.querySelector('.stat-label')?.textContent === 'Time Spent')
+                box.querySelector('.stat-val').textContent =
+                    `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        });
+    }
 
----
+    const accuracyEl = document.querySelector('.accuracy-pill');
+    if (accuracyEl) {
+        const pct = Math.round((activeQuizState.score / total) * 100);
+        accuracyEl.innerHTML = `<span class="icon"><i class="fa-solid fa-check" style="color:rgb(29,184,46);"></i></span> ${pct}% Accuracy`;
+    }
 
-<div align="center">
+    const feedbackEl = document.getElementById('feedback-message');
+    const pct = activeQuizState.score / total;
+    if      (pct === 1)  feedbackEl.textContent = 'Perfect score! Outstanding work.';
+    else if (pct >= 0.7) feedbackEl.textContent = 'Great job! You have a solid understanding.';
+    else if (pct >= 0.5) feedbackEl.textContent = 'Good effort! A little more practice and you will master this.';
+    else                 feedbackEl.textContent  = 'Keep trying! Every mistake is a learning opportunity.';
 
-**QuizMind** — Built as a frontend portfolio project.
+    const summaryBox = document.querySelector('.results-summary-box');
+    if (summaryBox && activeQuizState.answers) {
+        let html = `<div class="summary-header"><span>Question Summary</span></div>`;
+        questions.forEach((q, i) => {
+            const selected  = activeQuizState.answers[i] ?? -1;
+            const isCorrect = selected === q.correct;
+            html += `
+                <div class="summary-item">
+                    <div class="item-num">${i + 1}</div>
+                    <div class="item-text">
+                        <strong>${q.question}</strong>
+                        <span>Correct: ${q.answers[q.correct]}</span>
+                    </div>
+                    <div class="item-status ${isCorrect ? 'correct' : 'incorrect'}"
+                         style="color:${isCorrect ? 'var(--color-success)' : '#ba1a1a'};font-size:20px;">
+                        ${isCorrect ? '✔' : '✘'}
+                    </div>
+                </div>`;
+        });
+        summaryBox.innerHTML = html;
+    }
+}
 
-Designed and developed with a commitment to clean code, thoughtful design, and the craft of frontend engineering.
+function renderLeaderboard(addHistory = true) {
+    if (addHistory) pushState('leaderboard');
+    switchView('leaderboard', 'leaderboard');
 
-Made with dedication.
+    const container = document.getElementById('leaderboard-list');
+    if (!container) return;
 
-</div>
+    const allScores = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key.startsWith('quizScores_')) continue;
+        const user = key.replace('quizScores_', '');
+        JSON.parse(localStorage.getItem(key)).forEach(s =>
+            allScores.push({ name: user, score: s.score, total: s.total, category: s.category })
+        );
+    }
+    allScores.sort((a, b) => b.score - a.score);
+
+    container.innerHTML = `<div class="leaderboard-wrapper">
+        ${allScores.length === 0
+            ? `<p style="text-align:center;padding:40px;color:var(--text-muted)">No scores yet. Take a quiz to appear here!</p>`
+            : allScores.map((u, i) => `
+                <div class="leaderboard-item">
+                    <span>#${i + 1} — ${u.name} <span style="color:var(--text-muted);font-size:0.85rem;">(${u.category})</span></span>
+                    <strong>${u.score}/${u.total} pts</strong>
+                </div>`).join('')}
+    </div>`;
+}
+
+function renderMyQuizzes(addHistory = true) {
+    if (addHistory) pushState('myQuizzes');
+    switchView('myQuizzes', 'myQuizzes');
+
+    const container = document.getElementById('my-quizzes-list');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const savedQuizzes = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('quizProgress_')) {
+            try { savedQuizzes.push(JSON.parse(localStorage.getItem(key))); } catch (e) {}
+        }
+    }
+
+    if (savedQuizzes.length === 0) {
+        container.innerHTML = `<p style="grid-column:span 3;text-align:center;padding:40px;color:var(--text-muted);">You haven't started any quizzes yet.</p>`;
+        return;
+    }
+
+    savedQuizzes.forEach(quizState => {
+        const categoryData = quizzes[quizState.category];
+        const totalQ       = categoryData ? categoryData.length : 5;
+        const firstQ       = categoryData ? categoryData[0] : null;
+        const isCompleted  = quizState.currentQuestionIndex >= totalQ;
+        const percent      = Math.min(100, Math.round((quizState.currentQuestionIndex / totalQ) * 100));
+
+        const card = document.createElement('div');
+        card.className = 'category-card';
+        card.innerHTML = `
+            ${firstQ?.image ? `<img src="${firstQ.image}" alt="${quizState.category}">` : ''}
+            <div style="position:relative;z-index:2;width:100%;">
+                <h3 style="font-size:1.5rem;margin-bottom:8px;">${quizState.category}</h3>
+                <div style="background:rgba(255,255,255,0.2);display:inline-block;padding:4px 12px;border-radius:4px;font-size:0.875rem;">
+                    ${isCompleted ? 'Completed ✓' : 'In Progress'}
+                </div>
+                ${isCompleted ? `<p style="font-size:0.875rem;margin-top:8px;font-weight:normal;opacity:0.9;">Score: ${quizState.score}/${totalQ}</p>` : ''}
+                <div style="margin-top:16px;">
+                    <div style="font-size:0.75rem;margin-bottom:4px;opacity:0.8;">Progress ${percent}%</div>
+                    <div style="height:6px;border-radius:99px;background:rgba(0,0,0,0.2);">
+                        <div style="width:${isCompleted ? 100 : percent}%;height:100%;background:white;border-radius:99px;"></div>
+                    </div>
+                </div>
+            </div>`;
+
+        card.addEventListener('click', () => {
+            activeQuizState = quizState;
+            isCompleted ? renderResults() : renderQuestion();
+        });
+        container.appendChild(card);
+    });
+}
+
+// ─── Modal ───────────────────────────────────────────────────────────────────
+function openHowItWorksModal() {
+    const modal = document.getElementById('how-it-works-modal');
+    if (!modal) return;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeHowItWorksModal() {
+    const modal = document.getElementById('how-it-works-modal');
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+}
+
+// ─── Boot ────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', init);
